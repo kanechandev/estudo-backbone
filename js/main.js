@@ -1,26 +1,14 @@
 var Song = Backbone.Model.extend({
-    defaults: {
-        genre: "Jazz"
+    validate: function(attrs){
+        if(!attrs.title)
+            return "Title is required";
     }
 });
 
-var song = new Song();
-song.set("title", "Blue in Green");
-song.set({
-    artist: "Miles Davis",
-    publishYear: 1959
-});
-
 /*
-    Working with Attributes
+var song = new Song();
 
-    song.set("title", "Blue in Green");
+song.isValid();
 
-    var title = song.get("title");
-
-    var hasTitle = song.has("title");
-
-    song.unset("title");
-
-    song.clear();
+var latError = song.validationError;
 */
