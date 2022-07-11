@@ -1,29 +1,46 @@
-var Song = Backbone.Model.extend();
+		
+// In the first few sections, we do all the coding here.
+// Later, you'll see how to organize your code into separate
+// files and modules.
 
-var Songs = Backbone.Collection.extend({
-    model: Song
+var Vehicle = Backbone.Model.extend({
+
+	idAttribute: "registrationNumber",
+
+	urlRoot: "/api/vehicles",
+
+	validate: function(attrs){
+		if (!attrs.registrationNumber)
+			return "Vehicle is not valid.";
+	},
+
+	start: function(){
+		console.log("Vehicle started.");
+	}
 });
 
-var songs = new Songs();
-
-songs.add(new Song({ title: "Song 1", genre: "Jazz", downloads: 110 }), { at: 0 });
-
-songs.push(new Song({ title: "Song 2", genre: "Jazz", downloads: 90 }));
-
-var jazzSongs = songs.where({ genre: "Jazz"});
-console.log("Jazz Songs", jazzSongs);
-
-var firstJazzSong = songs.findWhere({ genre: "Jazz" });
-console.log("First Jazz Songz", firstJazzSong);
-
-var filteredSongs = songs.where({ genre: "Jazz", title: "Song 2" });
-console.log("Filtered Songs", filteredSongs);
-
-var topDownloads = songs.filter(function(song){
-    return song.get("downloads") > 100;
+var Vehicles = Backbone.Collection.extend({
+	Model: Vehicle
 });
-console.log("Top Downloads", topDownloads);
 
-songs.each(function(song){
-    console.log(song);
+var Car = Vehicle.extend({
+	start: function(){
+		console.log("Car with registration number " + this.get("registrationNumber") + " started.");
+	}
 });
+
+var vehicles = new Vehicles([
+	new Car({ registrationNumber: "XLI887", color: "Blue" }),
+	new Car({ registrationNumber: "ZNP123", color: "Blue" }),
+	new Car({ registrationNumber: "XUV456", color: "Gray" })
+]);
+
+var blueCars = vehicles.where({ color: "Blue" });
+console.log("Blue cars", blueCars);
+
+var carXLI887 = vehicles.findWhere({ registrationNumber: "XLI887" });
+console.log("Car with registration number XLI887", carXLI887);
+
+vehicles.remove(carXLI887);
+
+console.log("Vehicles as JSON", vehicles.toJSON());
