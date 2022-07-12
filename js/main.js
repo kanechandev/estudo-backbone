@@ -1,20 +1,28 @@
-var SongView = Backbone.View.extend({
-    tagName: "span",
-    className: "song",
-    id: "1234",
+var Song = Backbone.Model.extend();
 
-    attributes: {
-        "data-genre": "Jazz"
+var SongView = Backbone.View.extend({
+    events: {
+        "click": "onClick",
+        "click .bookmark": "onClickBookmark",
+    },
+
+    onClick: function(){
+        console.log("Listen Clicked");
+    },
+
+    onClickBookmark: function(e){
+        e.stopPropagation();
+        console.log("Bookmark Clicked");
     },
 
     render: function(){
-        this.$el.html("Hello World");
-
+        this.$el.html(this.model.get("title") + "<button>Listen</button> <button class='bookmark'>Bookmark</button>");
+        
         return this;
     }
 });
 
-var songView = new SongView();
-//songView.render();
+var song = new Song({ title: "Blue in Green" });
 
-$("#container").html(songView.render().$el);
+var songView = new SongView({ el: "#container", model: song });
+songView.render();
